@@ -1,0 +1,28 @@
+name: Guardian CI
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+concurrency:
+  group: guardian-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  test:
+    name: guardian-ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Run configured application checks without secrets
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          cfg = json.load(open('.github/guardian/config.json'))
+          command = cfg.get('test_command')
+          if not isinstance(command, list) or not command or not all(isinstance(x, str) and x for x in command):
+              raise SystemExit('Needs attention: configure real application tests first.')
+          subprocess.run(command, check=True, timeout=1500)
+          PY

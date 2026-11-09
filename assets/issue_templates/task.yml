@@ -1,0 +1,14 @@
+name: Request a change
+description: Describe the outcome you want.
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What should people be able to do?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: How will we know it works?
+      description: Give a practical example of the expected behavior.

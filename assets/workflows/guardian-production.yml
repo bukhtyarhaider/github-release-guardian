@@ -1,0 +1,38 @@
+name: Guardian production
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Merged release or urgent-fix pull request number
+        required: true
+        type: string
+  pull_request:
+    branches: [main]
+    types: [closed]
+permissions: {}
+concurrency:
+  group: guardian-production
+  cancel-in-progress: false
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.GUARDIAN_SITE_URL }}
+    permissions:
+      contents: write
+      actions: read
+      deployments: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - run: python3 .github/guardian/guardian.py pipeline production --pr "$PR_NUMBER"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}

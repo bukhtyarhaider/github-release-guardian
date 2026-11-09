@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "initial_version": "v0.1.0",
+  "baseline_ref": null,
+  "required_approvals": 1,
+  "required_checks": ["guardian-policy", "guardian-ci"],
+  "test_command": [],
+  "build_command": [],
+  "artifact_directory": "dist",
+  "deployment": {
+    "configured": false,
+    "provider": "aws-s3",
+    "region": "us-east-1",
+    "staging": {"bucket": "", "url": "", "role_arn": ""},
+    "production": {"bucket": "", "url": "", "role_arn": ""}
+  }
+}
