@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Release Guardian"
+  short_description: "Guide safe GitHub testing, releases, and handoffs"
+  default_prompt: "Use $github-release-guardian to inspect my project and explain the next safe step."

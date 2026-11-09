@@ -1,0 +1,29 @@
+# Security, trust boundaries, and limitations
+
+## Threat model
+
+Untrusted forks and PR text cannot execute with privileged tokens in the supplied policy workflow. `pull_request_target` and `workflow_run` check out trusted base/default-branch code only, post one required policy status, and have no deployment credentials. PR CI runs untrusted merge content with read-only access and no secrets; never use a self-hosted runner exposed to untrusted code without isolation. Candidate builds run after same-repository pushes; they have no cloud credentials. Staging deploy jobs receive a staging-only OIDC role. Production jobs use the production environment's approval and main-only restriction, then validate the merged candidate tree and immutable artifact.
+
+Write access to an app repository is a trust boundary: contributors can propose malicious code, including build output. Artifact hashes prove identity and integrity, not that a build is safe. Human review, real tests, protected workflow ownership, dependency controls, and runner isolation remain necessary. Never execute downloaded artifact scripts in a privileged job. Archive extraction rejects traversal, links, device entries, duplicates, and excessive sizes. The S3 adapter treats the output as static files only.
+
+Workflow changes require real code owner review over `.github/**`, including CODEOWNERS. No agent instruction can replace that server control. All bundled external actions are pinned to full commit SHAs. Review upstream security advisories and intentionally update pins through normal PR review. The generated configuration is trusted code; do not allow a PR to weaken it without independent owner review.
+
+## GitHub limitations
+
+Rulesets and environment protections depend on plan, visibility, repository/organization permissions, and policy. [GitHub's ruleset documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets) and [environment documentation](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments) describe availability. Private repositories may need a different plan for required deployment reviewers. Guardian blocks if it cannot verify the required gate; it does not replace it with an unchecked agent promise.
+
+GitHub hides bypass actor lists from tokens without ruleset write access. The audit reports this as unknown and requires an administrator to inspect it; workflow tokens still obey effective PR/check rules. The controller blocks a visible bypass allowance. Repository administrators or organization owners may be able to change the settings themselves. No repository-local package can prevent its administrators from disabling policy. Use organization rulesets, restricted administration, external required workflows/custom protection rules, and audit logs for stronger central enforcement. A required status bound to the GitHub Actions app alone does not distinguish every workflow in that app; code ownership and review of workflow changes are essential. Protect tag creation separately if your threat model requires only a release app to create version tags. GitHub.com Actions app ID differs from some enterprise installations.
+
+Workflow GITHUB_TOKEN events may not trigger another workflow in every case. The release controller explicitly supports workflow_dispatch as a recovery/continuation path. GitHub may require approval before running CI on bot-created synchronization PRs. An App token can be configured by an administrator with repository-scoped permissions where fully automatic downstream triggering is needed. Never use a broad personal token as an unexplained fallback. See [GitHub's trigger rules](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+
+## Supported deployment scope
+
+Included production adapter: AWS S3 static sites behind already configured HTTPS hosting. It does not provision AWS billing, DNS, CloudFront, databases, migrations, containers, backend runtime secrets, or another provider. Separate buckets and IAM roles are required, but isolation of data, domains, and third-party services must still be reviewed. S3 multi-object updates are not transactional; use a provider with immutable atomic deployment IDs when the application requires atomic rollout. Avoid serving mixed asset versions using content-hashed assets and appropriate cache policy. Basic HTTP/marker probes cannot certify application correctness or every CDN edge.
+
+Production secrets are not passed to build/test jobs. AWS OIDC trust must match the repository and environment exactly. Dedicated bucket deployment uses deletion of obsolete site files; only authorize this on buckets reserved for this app. Token values and environment variable values are not included in audit output. Third-party tool internals may still log failures: keep Actions secret masking and secure operational log access enabled.
+
+## Availability and recovery
+
+Local tests simulate GitHub responses and cloud behavior; they do not certify a particular live account. Interrupted settings application may leave some approved settings applied. Inspect remote state before retry. Failed health verification leaves the release incomplete/draft, even if some public files changed. Version tags are never moved; prefer a reviewed new-version repair. A successful release followed by failed synchronization must be reported as partial success, with pending PRs identified.
+
+The package supports POSIX local operation (macOS/Linux) because its process lock uses fcntl. Windows users should run the CLI through WSL or another compatible environment. Agent discovery is based on official documentation checked on 2026-11-09; app-specific behavior and permissions still need verification in the user's environment.
