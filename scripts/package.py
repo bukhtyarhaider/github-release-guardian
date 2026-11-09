@@ -11,7 +11,7 @@ def package():
     out = directory / "dist"
     out.mkdir(exist_ok=True)
     target = out / f"github-release-guardian-{__version__}.zip"
-    names = ["SKILL.md", "README.md", "LICENSE", "requirements-dev.txt", "agents", "scripts", "references", "assets", "docs", "adapters", "examples", "tests", ".github/workflows"]
+    names = ["SKILL.md", "README.md", "LICENSE", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "AGENTS.md", "requirements-dev.txt", "agents", "scripts", "references", "assets", "docs", "adapters", "examples", "tests", ".github"]
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as z:
         for name in names:
             path = directory / name

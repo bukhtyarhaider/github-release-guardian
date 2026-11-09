@@ -1,0 +1,55 @@
+name: Package candidate
+on:
+  push:
+    branches: [staging, 'release/**', 'hotfix/**']
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: guardian-package-staging
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/staging' || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/hotfix/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - run: python3 -m pip install -r requirements-dev.txt
+      - run: python3 -m unittest discover -s tests -v
+      - run: python3 scripts/validate_package.py
+      - id: build
+        run: python3 .github/repository_release.py build
+      - id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: package-${{ github.sha }}
+          path: ${{ steps.build.outputs.bundle }}
+          if-no-files-found: error
+          retention-days: 90
+  stage:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: staging
+    permissions:
+      contents: read
+      actions: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}
+          path: ${{ runner.temp }}/candidate
+          merge-multiple: true
+      - run: python3 .github/repository_release.py verify --bundle "$BUNDLE"
+        env:
+          BUNDLE: ${{ runner.temp }}/candidate

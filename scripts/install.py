@@ -40,7 +40,7 @@ def install(destination, aliases=False, update=False, uninstall=False):
             raise ValueError(f"Installed file was changed; preserve and review it first: {relative}")
     payload = {}
     if not uninstall:
-        for name in ("SKILL.md", "README.md", "LICENSE", "agents", "scripts", "references", "assets", "docs", "adapters", "examples"):
+        for name in ("SKILL.md", "README.md", "LICENSE", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "agents", "scripts", "references", "assets", "docs", "adapters", "examples"):
             source = SOURCE / name
             files = [source] if source.is_file() else [p for p in source.rglob("*") if p.is_file() and "__pycache__" not in p.parts]
             for p in files:
