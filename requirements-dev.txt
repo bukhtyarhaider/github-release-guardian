@@ -1,0 +1,2 @@
+# Only package YAML/frontmatter checks need a dependency. Runtime and unit tests use stdlib.
+PyYAML==6.0.3
