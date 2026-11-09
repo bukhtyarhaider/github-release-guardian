@@ -1,0 +1,2 @@
+"""GitHub Release Guardian. Python 3.11+, standard library only."""
+__version__ = "1.0.0"
