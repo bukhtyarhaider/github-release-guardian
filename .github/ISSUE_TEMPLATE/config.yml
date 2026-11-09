@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Installation and common errors
+    url: https://github.com/bukhtyarhaider/github-release-guardian/blob/main/docs/troubleshooting.md
+    about: Read the setup and recovery guide before filing an issue.
+  - name: Report a security vulnerability privately
+    url: https://github.com/bukhtyarhaider/github-release-guardian/security/advisories/new
+    about: Keep credentials and vulnerability details out of public issues.

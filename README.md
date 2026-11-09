@@ -1,5 +1,8 @@
 # GitHub Release Guardian
 
+[![Package tests](https://github.com/bukhtyarhaider/github-release-guardian/actions/workflows/package-tests.yml/badge.svg)](https://github.com/bukhtyarhaider/github-release-guardian/actions/workflows/package-tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 ## Quick start
 
 1. Open your project in your AI coding agent.
@@ -101,7 +104,7 @@ For a brand-new repository, establish its initial production branch first. For a
 | Staging/production workflows and S3 deployer | Isolated AWS buckets, OIDC roles, HTTPS URLs, GitHub environments |
 | Health checks, deployment records, synchronization PRs | Successful live staging and production rehearsals |
 
-This workspace was built and tested locally. It has not been installed into a live GitHub repository or deployed to your hosting account. See [validation results](docs/validation.md) for what was actually checked.
+The package has local validation and a successful GitHub test run. This repository publishes verified skill ZIPs; downstream application hosting still requires its own configuration and live verification. See [validation results](docs/validation.md) and [repository setup](docs/repository-setup.md) for what was actually checked.
 
 ## When something goes wrong
 
@@ -121,3 +124,5 @@ Say **“Explain what failed and safely continue.”** Guardian reports one of t
 </details>
 
 Licensed under [MIT](LICENSE).
+
+Contributors: read [CONTRIBUTING.md](CONTRIBUTING.md), [community expectations](CODE_OF_CONDUCT.md), and [private security reporting](SECURITY.md). Maintainers and agents should also read [this repository's package-release workflow](docs/repository-maintenance.md).

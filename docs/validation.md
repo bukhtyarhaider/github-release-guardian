@@ -30,3 +30,7 @@ This workspace began as an empty non-Git folder with no target repository or pro
 A repository administrator must review and apply protections, verify actual code owner access, and inspect any hidden bypass permissions. GitHub omits bypass actor lists from tokens without ruleset write access; the audit reports those lists as unknown rather than claiming they are empty. Ordinary workflow tokens remain subject to the effective server rules. The environment bypass flag must be exposed as false by the target API; if absent or true, production readiness fails closed and an administrator must inspect it.
 
 Before production use, complete the README checklist, run an authorized live staging rehearsal with real application tests and acceptance checks, and exercise the protected production approval/recovery path on a non-critical site. Other hosting providers require their own reviewed adapter and live verification. Local test success is not a certification of a live production account.
+
+## Repository setup follow-up
+
+The repository bootstrap adds nine package-adapter tests (90 total tests currently pass) and a Python 3.11/3.13 GitHub matrix. Native package candidates verify ZIP identity and isolated installation. Missing production review gates and administrator bypass block publication. See [repository setup](repository-setup.md) for live setup evidence and remaining actions. The earlier local-only statements above describe the original package build before GitHub activation.
