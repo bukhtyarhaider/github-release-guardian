@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    target-branch: staging
+    open-pull-requests-limit: 5
+    labels: [dependencies, 'release:none']
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      actions:
+        patterns: ['*']
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    target-branch: staging
+    open-pull-requests-limit: 5
+    labels: [dependencies, 'release:none']
+    commit-message:
+      prefix: 'chore(deps)'

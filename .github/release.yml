@@ -1,0 +1,12 @@
+changelog:
+  exclude:
+    labels: ['release:none', duplicate, invalid]
+  categories:
+    - title: Important compatibility changes
+      labels: ['release:major', breaking-change]
+    - title: What's new
+      labels: [enhancement, 'release:minor']
+    - title: What's fixed
+      labels: [bug, 'release:patch']
+    - title: Improvements
+      labels: ['*']

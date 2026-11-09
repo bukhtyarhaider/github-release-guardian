@@ -1,0 +1,6 @@
+# Repository ownership. A separate authorized reviewer is required for changes
+# authored by this owner; never bypass the review requirement.
+* @bukhtyarhaider
+/.github/ @bukhtyarhaider
+/scripts/guardian/ @bukhtyarhaider
+/SKILL.md @bukhtyarhaider

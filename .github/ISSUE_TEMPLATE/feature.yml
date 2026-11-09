@@ -1,0 +1,21 @@
+name: Request an improvement
+description: Describe an outcome you want Guardian to support.
+labels: [enhancement, 'status:needs-triage']
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What would you like to do?
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: What is difficult about the current experience?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: What would a successful result look like?
+      description: Include a simple example and your agent or hosting provider if relevant.
